@@ -15,10 +15,12 @@ closure over the name variable. Invoke outer saving the return value into
 another variable called 'inner'. */
 
 // Code Here
+var inner = outer()
 
 //Once you do that, invoke inner.
 
 //Code Here
+inner()
 
 
 
@@ -50,8 +52,9 @@ in your console. */
 
 
 
+var callJake = callFriend("Jake")
 
-
+callJake("435-555-9248")
 
 
 
@@ -65,13 +68,20 @@ in your console. */
 properly. */
 
 //Code Here
+function makeCounter(){
+  var current = 0  
+  function plusOne(){
+    return current += 1
+  }
+  return plusOne
+}
 
 //Uncomment this once you make your function
-//   var count = makeCounter();
-//   count(); // 1
-//   count(); // 2
-//   count(); // 3
-//   count(); // 4
+  var count = makeCounter();
+  count(); // 1
+  count(); // 2
+  count(); // 3
+  count(); // 4
 
 
 
@@ -97,20 +107,22 @@ http://stackoverflow.com/questions/17776940/javascript-module-pattern-with-examp
 */
 
 function counterFactory(value) {
-
-  // Code here.
-
-
   return {
+    inc:function(){
+      return value += 1
+    },
+    dec:function(){
+      return value -= 1
+    }
   }
 }
 
 
-counter = counterFactory(10);
-// counter.inc() // 11
-// counter.inc() // 12
-// counter.inc() // 13
-// counter.dec() // 12
+var counter = counterFactory(10);
+counter.inc() // 11
+counter.inc() // 12
+counter.inc() // 13
+counter.dec() // 12
 
 
 
