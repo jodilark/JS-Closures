@@ -143,13 +143,13 @@ will return 'You're doing awesome, keep it up firstname lastname.' */
 
 function motivation(firstname, lastname) {
 
-  var welcomeText = 'You\'re doing awesome, keep it up ';
+  var welcomeText = 'You\'re doing awesome, keep it up';
 
-  // code message function here.
-
-
-  //Uncommment this to return the value of your invoked message function
-  //return message();
+ function message() {
+    var str = `${welcomeText} ${firstname} ${lastname}.`
+    return str
+  }
+  return message();
 
 }
 
@@ -188,6 +188,10 @@ var module = (function() {
   // outside our lexical scope
   return {
     // Code here.
+    publicMethod: function(){
+      return privateMethod()
+    }
+
   };
 
 })();
@@ -207,12 +211,52 @@ var secondLevelFriends = ["Anne", "Harry", "Quinton"];
 var allUsers = ["Tom", "Dick", "Harry", "Anne", "Quinton", "Katie", "Mary"];
 
 function findPotentialFriends(existingFriends) {
-
+  // existingFriends is the one aruguement that findPotentialFriends takes. existingFriends is passed in through "findPotentialFriends(friends)" below
+  return function (friends) {
+    // since invoking findPotentialFriends returns the annonymous function (friends), we needed to give it a new function name that we could invoke directly... the reason for this is because the return function needs the existingFriends arguement but the existingFriends arguement can't be passed after a return.
+    return existingFriends.indexOf(friends) === -1
+    // this return states that if the test array value (determined by indexOf the friend being passed in when invoking the isNotAFriend function) has the same value as one of our current friends. If the test array value has an index it exists and won't return a -1. This will result in a false.
+  }
 }
-
 var isNotAFriend = findPotentialFriends( friends );
-// isNotAFriend(allUsers[0]); // false
-// isNotAFriend(secondLevelFriends[2]); // true
+  // to invoke the inner function, we must make findPotentialFriends with its arguement of "friends" a variable so we can invoke it with its own arguements which works because the inner function is an alias.
+isNotAFriend(allUsers[0]); // false
+  //allUsers[0] represents the "friends" variable in the inner function.
+  // isNotAFriend is a function so that means it can take arguements. In the first invocation, the arguement given is the allUser array index value is zero. This should run the isNotAFriend function and see if "Tom"(allUsers[0]) is a potential friend. since Tom is already a friend, he cannot be a potential friend.
+isNotAFriend(secondLevelFriends[2]); // true
+  // in this invocation, "Quinton" (secondLevelFriends[2]) can be a potential friends because "Quinton" is not currently our friend.
+
+
+
+
+
+
+//Backup of 7
+/******************************************************************************\
+ #PROBLEM-07
+ \******************************************************************************/
+/****** INSTRUCTIONS PROBLEM 7 ******/
+/* Here we are given three arrays: an array of friends, an array of second-level
+friends (friends of friends), and an array of all users. These arrays may share
+users. Write a function that takes in our existing friends and returns
+a function that will tell us if a given user is not already a friend. */
+// var friends = ["Tom", "Dick", "Harry"];
+// var secondLevelFriends = ["Anne", "Harry", "Quinton"];
+// var allUsers = ["Tom", "Dick", "Harry", "Anne", "Quinton", "Katie", "Mary"];
+
+// function findPotentialFriends(existingFriends) {
+
+// }
+
+// var isNotAFriend = findPotentialFriends( friends );
+// // isNotAFriend(allUsers[0]); // false
+// // isNotAFriend(secondLevelFriends[2]); // true
+
+
+
+
+
+
 
 
 /******************************************************************************\
@@ -222,8 +266,17 @@ var isNotAFriend = findPotentialFriends( friends );
 method, find all potential second level friends as well as potential friends
 from allUsers. */
 
-var potentialSecondLevelFriends = "?";
-var allPotentialFriends = "?";
+function noHarry (){
+secondLevelFriends.splice(1,1)
+return secondLevelFriends
+}
+
+var potentialSecondLevelFriends = noHarry();
+
+var allPotentialFriends = allUsers.filter(function(e) {
+  return friends.indexOf(e) === -1
+})
+
 
 
 /******************************************************************************\
@@ -248,9 +301,11 @@ to 5. What we need to do is console.log(i) so that it logs like so:
 
 function timeOutCounter() {
   for (var i = 0; i <= 5; i++) {
-    setTimeout(function() {
+    setTimeout(function(i) { //will pass i into the next function
+      return function() { // adding a return function will allow it to maintain a snapshot for context
     	console.log(i)
-	}, i * 1000)
+    }
+	}(i), i * 1000)// ()forces an imediate invokation of the prior function
   }
 }
 timeOutCounter();
